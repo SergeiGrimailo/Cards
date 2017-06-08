@@ -14,7 +14,7 @@ import android.widget.EditText;
 import com.gmail.sgrimailo.cards.db.CardsContract.CardSets;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
 
-public class NewCardsDetailsActivity extends AppCompatActivity {
+public class NewCardsSetDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,8 @@ public class NewCardsDetailsActivity extends AppCompatActivity {
                 String.format("New row has been inserted:\n_ID: %d, TITLE: %s",
                         newRowId, newCardsSetName));
 
-        Intent intent = new Intent(this, EditCardsActivity.class);
-        intent.putExtra(EditCardsActivity.EXTRA_CARDS_SET_ID_LABEL, newRowId);
+        Intent intent = new Intent(this, CardsSetActivity.class);
+        intent.putExtra(CardsSetActivity.EXTRA_CARDS_SET_ID_LABEL, newRowId);
         startActivity(intent);
     }
 

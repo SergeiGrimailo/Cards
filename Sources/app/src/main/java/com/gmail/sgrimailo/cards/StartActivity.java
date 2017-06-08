@@ -14,7 +14,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void onNewCardsButtonClick(View view) {
-        Intent intent = new Intent(this, NewCardsDetailsActivity.class);
+        Intent intent = new Intent(this, NewCardsSetDetailsActivity.class);
         startActivity(intent);
     }
 }

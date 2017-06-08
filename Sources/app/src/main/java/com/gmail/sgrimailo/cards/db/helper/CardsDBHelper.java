@@ -14,7 +14,7 @@ import com.gmail.sgrimailo.cards.db.CardsContract;
 public class CardsDBHelper extends SQLiteOpenHelper {
 
     private static final String DATA_BASE_NAME = "Cards.db";
-    private static final int DATA_BASE_VERSION = 1;
+    private static final int DATA_BASE_VERSION = 2;
 
     public CardsDBHelper(Context context) {
         super(context, DATA_BASE_NAME, null, DATA_BASE_VERSION);

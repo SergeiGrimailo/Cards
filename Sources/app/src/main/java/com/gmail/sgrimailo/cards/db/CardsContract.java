@@ -14,11 +14,26 @@ public final class CardsContract {
 
     public static final class CardSets implements BaseColumns {
 
-        public static final String LOG_TAG = String.format("%s - %s",CardsContract.LOG_TAG, CardSets.class.getSimpleName());
+        public static final String LOG_TAG = String.format("%s - %s",
+                CardsContract.LOG_TAG, CardSets.class.getSimpleName());
 
         public static final String TABLE_NAME = "card_sets";
 
         public static final String COLUMN_TITLE = "title";
+    }
+
+    public static final class Cards implements BaseColumns {
+
+        public static final String LOG_TAG = String.format("%s - %s",
+                CardsContract.LOG_TAG, Cards.class.getSimpleName());
+
+        public static final String TABLE_NAME = "cards";
+
+        public static final String COLUMN_CARD_SET_ID = "card_set_id";
+
+        public static final String COLUMN_FRONT_SIDE = "front_side";
+        public static final String COLUMN_BACK_SIDE = "back_side";
+
     }
 
 }

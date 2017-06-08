@@ -16,8 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gmail.sgrimailo.cards.NewCardsDetailsActivity" />
-        <activity android:name="com.gmail.sgrimailo.cards.EditCardsActivity"></activity>
+        <activity android:name="com.gmail.sgrimailo.cards.NewCardsSetDetailsActivity" />
+        <activity android:name="com.gmail.sgrimailo.cards.CardsSetActivity"></activity>
     </application>
 
 </manifest>

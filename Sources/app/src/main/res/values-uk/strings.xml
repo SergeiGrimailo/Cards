@@ -8,4 +8,7 @@
     <string name="cancel_button_string">Cancel</string>
     <string name="next_button_string">Next</string>
     <string name="newNameIsEmpty">Введить им\'я нового набору карток</string>
+    <string name="addButtonLabel">Add</string>
+    <string name="removeButtonLabel">Remove</string>
+    <string name="refreshButtonLabel">Refresh</string>
 </resources>
