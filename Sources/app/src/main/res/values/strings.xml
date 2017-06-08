@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Cards</string>
+    <string name="view_cards_button">View Cards</string>
+    <string name="new_cards_button">New Cards</string>
+    <string name="new_cards_name_label">New Cards Name:</string>
+    <string name="new_cards_name_default">Enter New Name Here</string>
+    <string name="cancel_button_string">Cancel</string>
+    <string name="next_button_string">Next</string>
+    <string name="newNameIsEmpty">Enter new cards name please.</string>
+</resources>
