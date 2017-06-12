@@ -24,6 +24,8 @@ public class CardSetCardsActivity extends AppCompatActivity {
             CardSetCardsActivity.class.getName(), "EXTRA_CARD_SET_ID");
 
     private static final int REQUEST_CODE_CREATE_NEW_CARD = 1;
+    private static final int REQUEST_CODE_EDIT_CARD = 2;
+
     private Long cardSetID;
     private Long selectedItemID;
 
@@ -72,16 +74,37 @@ public class CardSetCardsActivity extends AppCompatActivity {
         cardsListView.setAdapter(cardsAdapter);
     }
 
-    public void refreshButtonClick(View view) {
-        processIntent(getIntent());
-    }
-
     public void onAddButtonClick(View view) {
         Intent intent = new Intent(this, CardDetailsActivity.class);
         intent.putExtra(CardDetailsActivity.EXTRA_CARD_ACTION,
                 CardDetailsActivity.CARD_ACTION_CREATE_NEW);
         intent.putExtra(CardDetailsActivity.EXTRA_CARD_SET_ID, cardSetID);
         startActivityForResult(intent, REQUEST_CODE_CREATE_NEW_CARD);
+    }
+
+    public void onEditButtonClick(View view) {
+        if (selectedItemID != null) {
+            Intent intent = new Intent(this, CardDetailsActivity.class);
+            intent.putExtra(CardDetailsActivity.EXTRA_CARD_ACTION,
+                    CardDetailsActivity.CARD_ACTION_EDIT_EXISTING_ONE);
+            intent.putExtra(CardDetailsActivity.EXTRA_CARD_ID,
+                    selectedItemID);
+            startActivityForResult(intent, REQUEST_CODE_EDIT_CARD);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CREATE_NEW_CARD) {
+            if (resultCode == Activity.RESULT_OK) {
+                updateListView();
+            }
+        } else if (requestCode == REQUEST_CODE_EDIT_CARD) {
+            if (resultCode == Activity.RESULT_OK) {
+                updateListView();
+            }
+        }
     }
 
     public void onRemoveButtonClick(View view) {
@@ -110,13 +133,4 @@ public class CardSetCardsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_CREATE_NEW_CARD) {
-            if (resultCode == Activity.RESULT_OK) {
-                updateListView();
-            }
-        }
-    }
 }

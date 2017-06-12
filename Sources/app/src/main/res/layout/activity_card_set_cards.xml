@@ -10,15 +10,15 @@
         android:id="@+id/buttonRemove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="29dp"
-        android:layout_marginRight="27dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:onClick="onRemoveButtonClick"
         android:text="@string/button_label_remove"
-        app:layout_constraintRight_toLeftOf="@+id/buttonRefresh"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp" />
 
     <Button
         android:id="@+id/buttonAdd"
@@ -35,18 +35,21 @@
         tools:layout_constraintTop_creator="1" />
 
     <Button
-        android:id="@+id/buttonRefresh"
+        android:id="@+id/buttonEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="33dp"
-        android:layout_marginRight="33dp"
+        android:layout_marginEnd="35dp"
         android:layout_marginTop="16dp"
-        android:onClick="refreshButtonClick"
-        android:text="@string/button_label_refresh"
-        app:layout_constraintRight_toRightOf="parent"
+        android:onClick="onEditButtonClick"
+        android:text="@string/button_label_edit"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintRight_toLeftOf="@+id/buttonRemove"
+        android:layout_marginRight="35dp"
+        app:layout_constraintLeft_toRightOf="@+id/buttonAdd"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintHorizontal_bias="1.0" />
 
     <ListView
         android:id="@+id/lstvCards"

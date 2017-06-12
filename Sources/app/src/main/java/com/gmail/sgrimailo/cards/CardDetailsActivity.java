@@ -3,6 +3,7 @@ package com.gmail.sgrimailo.cards;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +36,30 @@ public class CardDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_details);
         processIntent(getIntent());
+
+        if (cardAction == CARD_ACTION_EDIT_EXISTING_ONE) {
+
+            SQLiteOpenHelper helper = new CardsDBHelper(this);
+            SQLiteDatabase db = helper.getReadableDatabase();
+
+            String[] columns = {};
+            String selection = String.format("%s = ?", Cards._ID);
+            Cursor cardCursor = db.query(Cards.TABLE_NAME, columns, selection,
+                    new String[] {cardId.toString()}, null, null, null);
+            if (cardCursor.moveToFirst()) {
+                int frontSideColumnInd = cardCursor.getColumnIndex(Cards.COLUMN_FRONT_SIDE);
+                int backSideColumnInd = cardCursor.getColumnIndex(Cards.COLUMN_BACK_SIDE);
+
+                EditText edtFrontSideContent = (EditText) findViewById(R.id.edtFrontSideContent);
+                EditText edtBackSideContent = (EditText) findViewById(R.id.edtBackSideContent);
+
+                edtFrontSideContent.setText(cardCursor.getString(frontSideColumnInd));
+                edtBackSideContent.setText(cardCursor.getString(backSideColumnInd));
+
+            } else {
+                throw new IllegalStateException(String.format("Couldn't find card (id: %d)", cardId));
+            }
+        }
     }
 
     private void processIntent(Intent intent) {
@@ -81,24 +106,44 @@ public class CardDetailsActivity extends AppCompatActivity {
             return;
         }
 
+        ContentValues values = new ContentValues();
+
+        values.put(Cards.COLUMN_FRONT_SIDE, edtFrontSideContent.getText().toString());
+        values.put(Cards.COLUMN_BACK_SIDE, edtBackSideContent.getText().toString());
+
+
         if (cardAction == CARD_ACTION_CREATE_NEW) {
 
-            ContentValues values = new ContentValues();
             values.put(Cards.COLUMN_CARD_SET_ID, cardSetId);
-            values.put(Cards.COLUMN_FRONT_SIDE, edtFrontSideContent.getText().toString());
-            values.put(Cards.COLUMN_BACK_SIDE, edtBackSideContent.getText().toString());
-
             long newRowId = db.insertOrThrow(Cards.TABLE_NAME, null, values);
-            Log.d(Cards.LOG_TAG,
-                    String.format("New row has been inserted - table: %s, id: %d, values: %s",
-                            Cards.TABLE_NAME, newRowId, values));
 
-            Intent result = new Intent();
-            getIntent().putExtra(EXTRA_CARD_ID, newRowId);
-            setResult(Activity.RESULT_OK, result);
+            Log.d(Cards.LOG_TAG,
+                    String.format("New card has been inserted - table: %s, id: %d, values: %s",
+                            Cards.TABLE_NAME, newRowId, values));
+            cardId = newRowId;
+
+        } else if (cardAction == CARD_ACTION_EDIT_EXISTING_ONE) {
+
+            String whereClause = String.format("%s = ?", Cards._ID);
+            int rowNumber = db.update(Cards.TABLE_NAME, values,
+                    whereClause, new String[] {cardId.toString()});
+
+            if (rowNumber == 1) {
+                Log.d(Cards.LOG_TAG,
+                        String.format("Card has been edited - id: %s, values: %s",
+                                cardId, values));
+            } else {
+                throw new RuntimeException("Unexpected case");
+            }
+
         } else {
-            throw new RuntimeException("Not implemented yet");
+            throw new RuntimeException("Unknown action");
         }
+
+        Intent result = new Intent();
+        getIntent().putExtra(EXTRA_CARD_ID, cardId);
+        setResult(Activity.RESULT_OK, result);
+
         finish();
     }
 }
