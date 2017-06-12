@@ -1,13 +1,26 @@
 <resources>
     <string name="app_name">Cards</string>
-    <string name="view_cards_button">View Cards</string>
-    <string name="new_cards_button">New Cards</string>
+
+    <string name="button_label_view_cards">View Cards</string>
+    <string name="button_label_new_card_set">New Cards</string>
+
     <string name="new_cards_name_label">New Cards Name:</string>
     <string name="new_cards_name_default">Enter New Name Here</string>
-    <string name="cancel_button_string">Cancel</string>
-    <string name="next_button_string">Next</string>
-    <string name="newNameIsEmpty">Enter new cards name please.</string>
-    <string name="addButtonLabel">Add</string>
-    <string name="removeButtonLabel">Remove</string>
-    <string name="refreshButtonLabel">Refresh</string>
+
+    <string name="button_label_cancel">Cancel</string>
+    <string name="button_label_next">Next</string>
+
+    <string name="warning_enter_not_empty_name">Enter new cards name please.</string>
+
+    <string name="button_label_add">Add</string>
+    <string name="button_label_remove">Remove</string>
+    <string name="button_label_refresh">Refresh</string>
+
+    <string name="front_side_content_label">Front side:</string>
+    <string name="front_side_content_hint">Type card\'s front side content here</string>
+    <string name="back_side_content_label">Back side:</string>
+    <string name="back_side_content_hint">Type card\'s back side content here</string>
+    <string name="type_not_empty_content">Type not empty content</string>
+    <string name="button_label_done">Done</string>
+    <string name="button_label_edit">Edit</string>
 </resources>
