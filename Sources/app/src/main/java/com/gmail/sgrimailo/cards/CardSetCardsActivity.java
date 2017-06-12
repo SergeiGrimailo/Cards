@@ -1,16 +1,20 @@
 package com.gmail.sgrimailo.cards;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.gmail.sgrimailo.cards.db.CardsContract;
 import com.gmail.sgrimailo.cards.db.CardsContract.Cards;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
 
@@ -21,11 +25,20 @@ public class CardSetCardsActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CREATE_NEW_CARD = 1;
     private Long cardSetID;
+    private Long selectedItemID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_set_cards);
+
+        ListView cardsListView = (ListView) findViewById(R.id.lstvCards);
+        cardsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedItemID = id;
+            }
+        });
 
         processIntent(getIntent());
     }
@@ -63,12 +76,38 @@ public class CardSetCardsActivity extends AppCompatActivity {
         processIntent(getIntent());
     }
 
-    public void addButtonClick(View view) {
+    public void onAddButtonClick(View view) {
         Intent intent = new Intent(this, CardDetailsActivity.class);
         intent.putExtra(CardDetailsActivity.EXTRA_CARD_ACTION,
                 CardDetailsActivity.CARD_ACTION_CREATE_NEW);
         intent.putExtra(CardDetailsActivity.EXTRA_CARD_SET_ID, cardSetID);
         startActivityForResult(intent, REQUEST_CODE_CREATE_NEW_CARD);
+    }
+
+    public void onRemoveButtonClick(View view) {
+        if (selectedItemID != null) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.alert_title_remove);
+            builder.setMessage(R.string.alert_title_remove);
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SQLiteOpenHelper helper = new CardsDBHelper(CardSetCardsActivity.this);
+                    SQLiteDatabase db = helper.getWritableDatabase();
+
+                    String whereClause = String.format("%s = ?", Cards._ID);
+                    db.delete(Cards.TABLE_NAME, whereClause, new String[] {selectedItemID.toString()});
+
+                    Log.d(CardSetCardsActivity.class.getName(),
+                            String.format("Card has been removed - id: %s, card set id: %s",
+                                    selectedItemID, cardSetID));
+                    updateListView();
+                }
+            });
+            builder.setNegativeButton(android.R.string.no, null);
+            builder.show();
+        }
     }
 
     @Override

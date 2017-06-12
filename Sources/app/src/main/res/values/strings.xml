@@ -23,4 +23,7 @@
     <string name="type_not_empty_content">Type not empty content</string>
     <string name="button_label_done">Done</string>
     <string name="button_label_edit">Edit</string>
+
+    <string name="alert_title_remove">Remove</string>
+    <string name="alert_question_remove_card">Are you sure you want to remove card?</string>
 </resources>
