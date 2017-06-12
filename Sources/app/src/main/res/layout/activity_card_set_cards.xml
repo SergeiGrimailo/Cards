@@ -39,17 +39,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="35dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="35dp"
         android:layout_marginTop="16dp"
         android:onClick="onEditButtonClick"
         android:text="@string/button_label_edit"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/buttonAdd"
+        app:layout_constraintRight_toLeftOf="@+id/buttonRemove"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"
-        app:layout_constraintRight_toLeftOf="@+id/buttonRemove"
-        android:layout_marginRight="35dp"
-        app:layout_constraintLeft_toRightOf="@+id/buttonAdd"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintHorizontal_bias="1.0" />
+        tools:layout_constraintTop_creator="1" />
 
     <ListView
         android:id="@+id/lstvCards"

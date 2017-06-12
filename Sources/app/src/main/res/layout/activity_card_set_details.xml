@@ -9,7 +9,7 @@
     tools:layout_editor_absoluteX="0dp">
 
     <EditText
-        android:id="@+id/etNewCardsSetName"
+        android:id="@+id/edt_card_set_name"
         android:layout_width="0dp"
         android:layout_height="47dp"
         android:ems="10"
@@ -36,7 +36,7 @@
         android:layout_marginStart="16dp"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/etNewCardsSetName"
+        app:layout_constraintBottom_toTopOf="@+id/edt_card_set_name"
         android:layout_marginTop="19dp"
         app:layout_constraintTop_toBottomOf="@+id/btnDone"
         tools:layout_constraintLeft_creator="1"

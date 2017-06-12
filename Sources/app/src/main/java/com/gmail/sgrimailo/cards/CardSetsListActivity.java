@@ -1,10 +1,10 @@
 package com.gmail.sgrimailo.cards;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,13 +13,14 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.gmail.sgrimailo.cards.db.CardsContract;
 import com.gmail.sgrimailo.cards.db.CardsContract.CardSets;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
 
 public class CardSetsListActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CREATE_NEW_CARD_SET = 1;
+    private static final int REQUEST_CODE_EDIT_CARD_SET = 2;
+
     private Long selectedCardSetID = null;
 
     @Override
@@ -39,7 +40,6 @@ public class CardSetsListActivity extends AppCompatActivity {
         });
     }
 
-    @NonNull
     private void updateListView() {
         SQLiteDatabase db = new CardsDBHelper(this).getReadableDatabase();
 
@@ -57,7 +57,11 @@ public class CardSetsListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        updateListView();
+        if (resultCode == Activity.RESULT_OK
+                && (requestCode == REQUEST_CODE_CREATE_NEW_CARD_SET
+                    || requestCode == REQUEST_CODE_EDIT_CARD_SET)) {
+            updateListView();
+        }
     }
 
     public void onAddButtonClick(View view) {
@@ -67,7 +71,7 @@ public class CardSetsListActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_CREATE_NEW_CARD_SET);
     }
 
-    public void onEditButtonClick(View view) {
+    public void onCardsButtonClick(View view) {
         if (selectedCardSetID != null) {
             Intent intent = new Intent(this, CardSetCardsActivity.class);
             intent.putExtra(CardSetCardsActivity.EXTRA_CARD_SET_ID, selectedCardSetID);
@@ -75,7 +79,13 @@ public class CardSetsListActivity extends AppCompatActivity {
         }
     }
 
-    public void onRefreshButtonClick(View view) {
-        updateListView();
+    public void onEditButtonClick(View view) {
+        if (selectedCardSetID != null) {
+            Intent intent = new Intent(this, CardSetDetailsActivity.class);
+            intent.putExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ACTION,
+                    CardSetDetailsActivity.CARD_SET_ACTION_EDIT_EXISTING_ONE);
+            intent.putExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ID, selectedCardSetID);
+            startActivityForResult(intent, REQUEST_CODE_EDIT_CARD_SET);
+        }
     }
 }

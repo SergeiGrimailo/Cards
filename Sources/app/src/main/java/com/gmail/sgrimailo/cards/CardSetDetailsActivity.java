@@ -3,6 +3,7 @@ package com.gmail.sgrimailo.cards;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AlertDialog;
@@ -25,6 +26,8 @@ public class CardSetDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_CARD_SET_ID = String.format("%s.%s",
             CardSetDetailsActivity.class.getName(), "EXTRA_CARD_SET_ID");
+    private Integer cardSetAction;
+    private Long cardSetID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,29 @@ public class CardSetDetailsActivity extends AppCompatActivity {
         if (!getIntent().hasExtra(EXTRA_CARD_SET_ACTION)) {
             throw new IllegalStateException(String.format("Set up card set activity action (%s)",
                     "EXTRA_CARD_SET_ACTION"));
+        } else {
+            cardSetAction = getIntent().getIntExtra(EXTRA_CARD_SET_ACTION, -1);
+            if (cardSetAction == CARD_SET_ACTION_EDIT_EXISTING_ONE) {
+                if (!getIntent().hasExtra(EXTRA_CARD_SET_ID)) {
+                    throw new IllegalStateException(
+                            String.format("Set up card set id (%s)", "EXTRA_CARD_SET_ID"));
+                } else {
+                    cardSetID = getIntent().getLongExtra(EXTRA_CARD_SET_ID, -1);
+
+                    SQLiteOpenHelper helper = new CardsDBHelper(this);
+                    SQLiteDatabase db = helper.getReadableDatabase();
+
+                    String[] columns = {CardSets.COLUMN_TITLE};
+                    String selection = String.format("%s = ?", CardSets._ID);
+                    Cursor cardSetCursor = db.query(CardSets.TABLE_NAME, columns, selection, new String[] {
+                            cardSetID.toString()}, null, null, null);
+                    if (cardSetCursor.moveToFirst()) {
+                        EditText cardSetNameEditText = (EditText) findViewById(R.id.edt_card_set_name);
+                        int cardSetTitleColumnInd = cardSetCursor.getColumnIndex(CardSets.COLUMN_TITLE);
+                        cardSetNameEditText.setText(cardSetCursor.getString(cardSetTitleColumnInd));
+                    }
+                }
+            }
         }
     }
 
@@ -43,7 +69,7 @@ public class CardSetDetailsActivity extends AppCompatActivity {
         SQLiteOpenHelper helper = new CardsDBHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        EditText etCardsSetName = (EditText) findViewById(R.id.etNewCardsSetName);
+        EditText etCardsSetName = (EditText) findViewById(R.id.edt_card_set_name);
         String newCardsSetName = etCardsSetName.getText().toString();
         if (newCardsSetName.isEmpty()) {
             new AlertDialog.Builder(this)
@@ -56,20 +82,25 @@ public class CardSetDetailsActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(CardSets.COLUMN_TITLE, newCardsSetName);
 
-        int action = getIntent().getExtras().getInt(EXTRA_CARD_SET_ACTION);
-        if (action == CARD_SET_ACTION_CREATE_NEW_ONE) {
-            long newRowId = db.insert(CardSets.TABLE_NAME, null, values);
+        if (cardSetAction == CARD_SET_ACTION_CREATE_NEW_ONE) {
+            cardSetID = db.insert(CardSets.TABLE_NAME, null, values);
             Log.d(CardSets.LOG_TAG,
                     String.format("New row has been inserted:\n_ID: %d, TITLE: %s",
-                            newRowId, newCardsSetName));
-
-            Intent intent = new Intent(this, CardSetCardsActivity.class);
-            intent.putExtra(EXTRA_CARD_SET_ID, newRowId);
-            setResult(Activity.RESULT_OK, intent);
-
+                            cardSetID, newCardsSetName));
         } else {
-            throw new RuntimeException("Not implemented yet");
+            String whereClause = String.format("%s = ?", CardSets._ID);
+            if (db.update(CardSets.TABLE_NAME, values, whereClause, new String[]
+                    {cardSetID.toString()}) == 1) {
+                Log.d(CardSets.LOG_TAG, String.format(
+                        "Card set has been updated (id: %s, values: %s)", cardSetID, values));
+            } else {
+                throw new RuntimeException("Unexpected case");
+            }
         }
+
+        Intent intent = new Intent(this, CardSetCardsActivity.class);
+        intent.putExtra(EXTRA_CARD_SET_ID, cardSetID);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 }
