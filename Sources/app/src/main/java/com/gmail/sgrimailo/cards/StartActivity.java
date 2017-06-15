@@ -49,4 +49,14 @@ public class StartActivity extends AppCompatActivity {
             alertBuilder.show();
         }
     }
+
+    public void onViewPagerButtonClick(View view) {
+        Intent intent = new Intent(this, ScreenSlidePagerActivity.class);
+        startActivity(intent);
+    }
+
+    public void onCardFlipButtonClick(View view) {
+        Intent intent = new Intent(this, CardFlipActivity.class);
+        startActivity(intent);
+    }
 }

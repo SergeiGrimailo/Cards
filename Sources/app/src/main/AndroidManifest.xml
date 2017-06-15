@@ -19,7 +19,9 @@
         <activity android:name=".CardSetDetailsActivity" />
         <activity android:name=".CardSetCardsActivity" />
         <activity android:name=".CardDetailsActivity" />
-        <activity android:name=".CardSetsListActivity"></activity>
+        <activity android:name=".CardSetsListActivity" />
+        <activity android:name=".ScreenSlidePagerActivity" />
+        <activity android:name=".CardFlipActivity"></activity>
     </application>
 
 </manifest>
