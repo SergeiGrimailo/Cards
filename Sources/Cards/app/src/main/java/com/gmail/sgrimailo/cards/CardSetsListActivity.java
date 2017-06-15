@@ -21,12 +21,31 @@ public class CardSetsListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CREATE_NEW_CARD_SET = 1;
     private static final int REQUEST_CODE_EDIT_CARD_SET = 2;
 
+    public static final String EXTRA_RUN_MODE = String.format("%s.%s",
+            CardSetsListActivity.class.getName(), "EXTRA_RUN_MODE");
+
+    public static final int RUN_MODE_SELECT_CARD_SET = 1;
+
+    public static final String EXTRA_SELECTED_CARD_SET_ID = String.format("%s.%s",
+            CardSetsListActivity.class.getName(), "EXTRA_SELECTED_CARD_SET_ID");
+
     private Long selectedCardSetID = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_sets_list);
+
+        int runMode = getIntent().getIntExtra(EXTRA_RUN_MODE, 0);
+        View panelCardSetsEditing = findViewById(R.id.panelCardSetsEditing);
+        View panelCardSetSelect = findViewById(R.id.panelCardSetSelect);
+        if (runMode == RUN_MODE_SELECT_CARD_SET) {
+            panelCardSetsEditing.setVisibility(View.INVISIBLE);
+            panelCardSetSelect.setVisibility(View.VISIBLE);
+        } else {
+            panelCardSetsEditing.setVisibility(View.VISIBLE);
+            panelCardSetSelect.setVisibility(View.INVISIBLE);
+        }
 
         updateListView();
 
@@ -86,6 +105,15 @@ public class CardSetsListActivity extends AppCompatActivity {
                     CardSetDetailsActivity.CARD_SET_ACTION_EDIT_EXISTING_ONE);
             intent.putExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ID, selectedCardSetID);
             startActivityForResult(intent, REQUEST_CODE_EDIT_CARD_SET);
+        }
+    }
+
+    public void onSelectCardSetButtonClick(View view) {
+        if (selectedCardSetID != null) {
+            Intent data = new Intent();
+            data.putExtra(EXTRA_SELECTED_CARD_SET_ID, selectedCardSetID);
+            setResult(Activity.RESULT_OK, data);
+            finish();
         }
     }
 }

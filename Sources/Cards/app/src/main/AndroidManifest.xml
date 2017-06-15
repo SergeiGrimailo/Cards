@@ -20,8 +20,7 @@
         <activity android:name=".CardSetCardsActivity" />
         <activity android:name=".CardDetailsActivity" />
         <activity android:name=".CardSetsListActivity" />
-        <activity android:name=".ScreenSlidePagerActivity" />
-        <activity android:name=".CardFlipActivity"></activity>
+        <activity android:name=".CardsPlayerActivity"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ public class StartActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CREATE_NEW_CARD_SET = 1;
     private static final int REQUEST_CODE_EDIT_CARD_SET = 2;
+    private static final int REQUEST_CODE_SELECT_CARD_SET = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +44,32 @@ public class StartActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_EDIT_CARD_SET);
             }
         } else if (requestCode == REQUEST_CODE_EDIT_CARD_SET) {
-            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-            alertBuilder.setTitle("DEBUG");
-            alertBuilder.setMessage("Card set has been created!");
-            alertBuilder.show();
+            if (resultCode == Activity.RESULT_OK) {
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setTitle("DEBUG");
+                alertBuilder.setMessage("Card set has been created!");
+                alertBuilder.show();
+            }
+        } else if (requestCode == REQUEST_CODE_SELECT_CARD_SET) {
+            if (resultCode == Activity.RESULT_OK) {
+                Long selectedCardSet = data.getLongExtra(CardSetsListActivity.EXTRA_SELECTED_CARD_SET_ID, -1);
+                if (selectedCardSet != -1) {
+                    Intent intent = new Intent(this, CardsPlayerActivity.class);
+                    intent.putExtra(CardsPlayerActivity.EXTRA_CARD_SET_ID, selectedCardSet);
+                    startActivity(intent);
+                } else {
+                    throw new RuntimeException("Unexpected case");
+                }
+            }
+        } else {
+            throw new IllegalStateException("Unknown request code");
         }
     }
 
-    public void onViewPagerButtonClick(View view) {
-        Intent intent = new Intent(this, ScreenSlidePagerActivity.class);
-        startActivity(intent);
-    }
-
-    public void onCardFlipButtonClick(View view) {
-        Intent intent = new Intent(this, CardFlipActivity.class);
-        startActivity(intent);
+    public void onRunCardSetButtonClick(View view) {
+        Intent intent = new Intent(this, CardSetsListActivity.class);
+        intent.putExtra(CardSetsListActivity.EXTRA_RUN_MODE,
+                CardSetsListActivity.RUN_MODE_SELECT_CARD_SET);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_CARD_SET);
     }
 }

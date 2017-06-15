@@ -4,87 +4,123 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gmail.sgrimailo.cards.CardSetsListActivity">
+    tools:context="com.gmail.sgrimailo.cards.CardSetsListActivity"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="53dp"
-        android:layout_height="46dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:onClick="onAddButtonClick"
-        android:text="@string/button_label_add"
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/lstvCardSets"
+        android:layout_marginStart="11dp"
+        android:layout_marginEnd="11dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="6dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_editor_absoluteY="19dp" />
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp">
 
-    <Button
-        android:id="@+id/btnRemove"
-        android:layout_width="88dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/button_label_remove"
-        app:layout_constraintLeft_toRightOf="@+id/btnAdd"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        <LinearLayout
+            android:id="@+id/panelCardSetsEditing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="invisible">
 
-    <Button
-        android:id="@+id/btnCards"
-        android:layout_width="88dp"
-        android:layout_height="49dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="16dp"
-        android:onClick="onCardsButtonClick"
-        android:text="@string/button_label_cards"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="88dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:onClick="onAddButtonClick"
+                android:text="@string/button_label_add"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintTop_creator="1" />
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="88dp"
+                android:layout_height="49dp"
+                android:layout_weight="1"
+                android:onClick="onEditButtonClick"
+                android:text="@string/button_label_edit"
+                tools:layout_editor_absoluteX="174dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <Button
+                android:id="@+id/btnRemove"
+                android:layout_width="88dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/button_label_remove"
+                app:layout_constraintLeft_toRightOf="@+id/btnAdd"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintTop_creator="1" />
+
+            <Button
+                android:id="@+id/btnCards"
+                android:layout_width="88dp"
+                android:layout_height="49dp"
+                android:layout_weight="1"
+                android:onClick="onCardsButtonClick"
+                android:text="@string/button_label_cards"
+                tools:layout_editor_absoluteX="276dp"
+                tools:layout_editor_absoluteY="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/panelCardSetSelect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="88dp"
+                android:layout_height="49dp"
+                android:layout_weight="1"
+                android:onClick="onCardsButtonClick"
+                android:text="@string/button_label_cards"
+                tools:layout_editor_absoluteX="276dp"
+                tools:layout_editor_absoluteY="16dp" />
+
+            <Button
+                android:id="@+id/btnSelectCardSet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="32dp"
+                android:onClick="onSelectCardSetButtonClick"
+                android:text="@string/button_label_select_card_set" />
+        </LinearLayout>
+    </FrameLayout>
 
     <ListView
         android:id="@+id/lstvCardSets"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="17dp"
+        android:layout_height="420dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
         android:choiceMode="singleChoice"
         android:listSelector="@android:color/holo_orange_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAdd"
+        tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        android:layout_marginBottom="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp" />
 
-    <Button
-        android:id="@+id/btnEdit"
-        android:layout_width="69dp"
-        android:layout_height="49dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="14dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        android:onClick="onEditButtonClick"
-        android:text="@string/button_label_edit"
-        app:layout_constraintLeft_toRightOf="@+id/btnRemove"
-        app:layout_constraintRight_toLeftOf="@+id/btnCards"
-        app:layout_constraintTop_toTopOf="@+id/btnRemove"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_editor_absoluteX="201dp"
-        tools:layout_editor_absoluteY="15dp" />
 </android.support.constraint.ConstraintLayout>
