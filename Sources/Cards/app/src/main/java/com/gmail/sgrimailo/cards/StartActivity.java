@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class StartActivity extends AppCompatActivity {
@@ -12,6 +13,7 @@ public class StartActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CREATE_NEW_CARD_SET = 1;
     private static final int REQUEST_CODE_EDIT_CARD_SET = 2;
     private static final int REQUEST_CODE_SELECT_CARD_SET = 3;
+    private static final int REQUEST_CODE_SELECT_FILE_TO_IMPORT = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,10 @@ public class StartActivity extends AppCompatActivity {
                     throw new RuntimeException("Unexpected case");
                 }
             }
+        } else if (requestCode == REQUEST_CODE_SELECT_FILE_TO_IMPORT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d("file select data", data.toString());
+            }
         } else {
             throw new IllegalStateException("Unknown request code");
         }
@@ -71,5 +77,16 @@ public class StartActivity extends AppCompatActivity {
         intent.putExtra(CardSetsListActivity.EXTRA_RUN_MODE,
                 CardSetsListActivity.RUN_MODE_SELECT_CARD_SET);
         startActivityForResult(intent, REQUEST_CODE_SELECT_CARD_SET);
+    }
+
+    public void onPickFileButtonClick(View view) {
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("*/*");
+
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/jpg");
+        startActivityForResult(intent, REQUEST_CODE_SELECT_FILE_TO_IMPORT);
+
+
     }
 }
