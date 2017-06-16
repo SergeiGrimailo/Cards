@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.gmail.sgrimailo.cards.db.CardsContract;
 import com.gmail.sgrimailo.cards.db.CardsContract.Cards;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
 
@@ -39,15 +40,25 @@ public class CardsPlayerActivity extends AppCompatActivity {
     private class CardsPlayerAdapter extends FragmentStatePagerAdapter {
 
         private final Cursor mCardSetCursor;
+        private final int mIDColumnIndex;
 
         public CardsPlayerAdapter(FragmentManager fm, Cursor cardSetCursor) {
             super(fm);
             mCardSetCursor = cardSetCursor;
+            mIDColumnIndex = mCardSetCursor.getColumnIndex(Cards._ID);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return new CardsPlayerFragment();
+
+            CardsPlayerFragment cardsPlayerFragment = new CardsPlayerFragment();
+            Bundle args = new Bundle();
+
+            mCardSetCursor.moveToPosition(position);
+            args.putLong(CardsPlayerFragment.ARG_CARD_ID, mCardSetCursor.getLong(mIDColumnIndex));
+
+            cardsPlayerFragment.setArguments(args);
+            return cardsPlayerFragment;
         }
 
         @Override

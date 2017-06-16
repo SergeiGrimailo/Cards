@@ -26,4 +26,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_screen_slide_pager">ScreenSlidePagerActivity</string>
     <string name="button_label_select_card_set">Select Card Set</string>
+    <string name="stub_front_side_content">Front Side Content</string>
+    <string name="stub_back_side_content">Back Side content</string>
 </resources>
