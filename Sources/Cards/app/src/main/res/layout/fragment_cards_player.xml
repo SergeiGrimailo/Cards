@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lCardsHolder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="false"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="32dp"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/lFrontSide"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/lCardSidesHolder"
+        android:layout_gravity="center"
+        android:background="@drawable/card_background"
+        app:layout_aspectRatio="178%"
+        app:layout_widthPercent="100%">
 
-        <TextView
-            android:id="@+id/tvFrontSideContent"
+        <RelativeLayout
+            android:id="@+id/lFrontSide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvFrontSideContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/stub_front_side_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/lBackSide"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="@string/stub_front_side_content" />
-    </RelativeLayout>
+            android:visibility="invisible">
 
-    <RelativeLayout
-        android:id="@+id/lBackSide"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+            <TextView
+                android:id="@+id/tvBackSideContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/stub_back_side_content" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tvBackSideContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="@string/stub_back_side_content" />
-    </RelativeLayout>
-</FrameLayout>
+    </FrameLayout>
+
+</android.support.percent.PercentFrameLayout>
