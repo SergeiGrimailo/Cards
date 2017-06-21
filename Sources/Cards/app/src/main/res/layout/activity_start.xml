@@ -17,7 +17,7 @@
         android:layout_marginStart="43dp"
         android:layout_marginTop="29dp"
         android:onClick="onViewCardSetsButtonClick"
-        android:text="@string/button_label_view_cards"
+        android:text="@string/button_label_view_card_sets"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

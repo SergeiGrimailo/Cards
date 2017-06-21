@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Cards</string>
 
-    <string name="button_label_view_cards">View Cards</string>
-    <string name="button_label_new_card_set">New Cards</string>
+    <string name="button_label_view_card_sets">View Card Sets</string>
+    <string name="button_label_new_card_set">New Card Set</string>
 
     <string name="new_cards_name_label">New Cards Name:</string>
     <string name="new_cards_name_default">Enter New Name Here</string>

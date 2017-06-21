@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Картки</string>
-    <string name="button_label_view_cards">Переглянути картки</string>
+    <string name="button_label_view_card_sets">Переглянути картки</string>
     <string name="button_label_new_card_set">Створити картки</string>
     <string name="new_cards_name_label">New Cards Name:</string>
     <string name="new_cards_name_default">Enter New Name Here</string>
