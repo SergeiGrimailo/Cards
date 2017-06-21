@@ -22,5 +22,7 @@
         <activity android:name=".CardSetsListActivity" />
         <activity android:name=".CardsPlayerActivity"></activity>
     </application>
+    
+    <uses-permission android:name="com.android.vending.BILLING" />
 
 </manifest>
