@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.gmail.sgrimailo.utils.file_explorer.FileExplorerActivity;
+
 public class StartActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CREATE_NEW_CARD_SET = 1;
@@ -80,13 +82,14 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void onPickFileButtonClick(View view) {
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.setType("*/*");
 
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/jpg");
+        Intent intent = new Intent(this, FileExplorerActivity.class);
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE_TO_IMPORT);
 
 
+    }
+
+    public void onPurchaseButtonClick(View view) {
+        //
     }
 }
