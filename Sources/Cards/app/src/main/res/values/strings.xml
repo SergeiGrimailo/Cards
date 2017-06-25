@@ -36,4 +36,6 @@
     <string name="button_label_select_card_set">Select Card Set</string>
     <string name="stub_front_side_content">Front Side Content</string>
     <string name="stub_back_side_content">Back Side content</string>
+    <string name="drawer_open">Drawer Open Description</string>
+    <string name="drawer_close">Drawer Close Description</string>
 </resources>

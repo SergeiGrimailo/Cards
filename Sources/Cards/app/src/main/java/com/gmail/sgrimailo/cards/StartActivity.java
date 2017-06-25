@@ -86,6 +86,9 @@ public class StartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FileExplorerActivity.class);
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE_TO_IMPORT);
 
+//        Intent intent = new Intent(this, NavigationDrawerActivity.class);
+//        startActivity(intent);
+
 
     }
 
