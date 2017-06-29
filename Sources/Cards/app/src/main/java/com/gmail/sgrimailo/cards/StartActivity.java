@@ -24,7 +24,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void onViewCardSetsButtonClick(View view) {
-        Intent intent = new Intent(this, CardSetsListActivity.class);
+        Intent intent = new Intent(this, CardSetListActivity.class);
         startActivity(intent);
     }
 
@@ -56,7 +56,7 @@ public class StartActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUEST_CODE_SELECT_CARD_SET) {
             if (resultCode == Activity.RESULT_OK) {
-                Long selectedCardSet = data.getLongExtra(CardSetsListActivity.EXTRA_SELECTED_CARD_SET_ID, -1);
+                Long selectedCardSet = data.getLongExtra(CardSetListActivity.EXTRA_SELECTED_CARD_SET_ID, -1);
                 if (selectedCardSet != -1) {
                     Intent intent = new Intent(this, CardsPlayerActivity.class);
                     intent.putExtra(CardsPlayerActivity.EXTRA_CARD_SET_ID, selectedCardSet);
@@ -75,9 +75,9 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void onRunCardSetButtonClick(View view) {
-        Intent intent = new Intent(this, CardSetsListActivity.class);
-        intent.putExtra(CardSetsListActivity.EXTRA_RUN_MODE,
-                CardSetsListActivity.RUN_MODE_SELECT_CARD_SET);
+        Intent intent = new Intent(this, CardSetListActivity.class);
+        intent.putExtra(CardSetListActivity.EXTRA_RUN_MODE,
+                CardSetListActivity.RUN_MODE_SELECT_CARD_SET);
         startActivityForResult(intent, REQUEST_CODE_SELECT_CARD_SET);
     }
 
