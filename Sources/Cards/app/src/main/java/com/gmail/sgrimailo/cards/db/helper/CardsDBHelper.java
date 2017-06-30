@@ -14,10 +14,13 @@ import com.gmail.sgrimailo.cards.db.CardsContract;
 public class CardsDBHelper extends SQLiteOpenHelper {
 
     private static final String DATA_BASE_NAME = "Cards.db";
-    private static final int DATA_BASE_VERSION = 2;
+    private static final int DATA_BASE_VERSION = 4;
+
+    private final Context mContext;
 
     public CardsDBHelper(Context context) {
         super(context, DATA_BASE_NAME, null, DATA_BASE_VERSION);
+        mContext = context;
     }
 
     @Override
@@ -56,7 +59,7 @@ public class CardsDBHelper extends SQLiteOpenHelper {
             throw new RuntimeException("Couldn't create data base.", e);
         }
         for (int i = 0; i < DATA_BASE_VERSION; i++) {
-            actions[i].doAction(db);
+            actions[i].doAction(db, mContext);
         }
     }
 
@@ -72,8 +75,8 @@ public class CardsDBHelper extends SQLiteOpenHelper {
                     String.format("Couldn't upgrade data base from version: %d to version: %d.",
                             oldVersion, newVersion), e);
         }
-        for (int i = oldVersion - 1; i < newVersion; i++) {
-            actions[i].doAction(db);
+        for (int i = oldVersion; i < newVersion; i++) {
+            actions[i].doAction(db, mContext);
         }
     }
 }

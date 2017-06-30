@@ -30,4 +30,10 @@
     <string name="stub_back_side_content">Back Side content</string>
     <string name="drawer_open">Drawer Open Description</string>
     <string name="drawer_close">Drawer Close Description</string>
+    <string name="shared_preferences_name" />
+    <string name="alert_couldnt_delete_system_category" />
+    <string name="alert_question_move_cards_to_unsorted">Move all underlaying cards to unsorted?</string>
+    <string name="action_move_to_unsorted">Move to Unsorted</string>
+    <string name="action_delete_all_underlaying_cards">Delete All</string>
+    <string name="couldnt_find_unsorted_cat">Couldn\'t find unsorted category</string>
 </resources>

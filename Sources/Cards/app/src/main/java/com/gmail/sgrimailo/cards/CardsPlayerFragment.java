@@ -50,7 +50,7 @@ public class CardsPlayerFragment extends AppCompatDialogFragment {
 
         SQLiteDatabase db = new CardsDBHelper(getContext()).getReadableDatabase();
 
-        Cursor cardCursor = DataBaseHelper.getItemByID(db, Cards.TABLE_NAME,
+        Cursor cardCursor = DataBaseHelper.getItemById(db, Cards.TABLE_NAME,
                 new String[]{Cards.COLUMN_FRONT_SIDE, Cards.COLUMN_BACK_SIDE}, cardID);
         cardCursor.moveToFirst();
 

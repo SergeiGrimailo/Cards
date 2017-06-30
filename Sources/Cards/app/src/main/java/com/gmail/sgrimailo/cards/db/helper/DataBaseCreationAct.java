@@ -1,5 +1,6 @@
 package com.gmail.sgrimailo.cards.db.helper;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -7,5 +8,5 @@ import android.database.sqlite.SQLiteDatabase;
  */
 
 interface DataBaseCreationAct {
-    void doAction(SQLiteDatabase db);
+    void doAction(SQLiteDatabase db, Context context);
 }

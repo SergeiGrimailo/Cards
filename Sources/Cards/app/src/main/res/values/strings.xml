@@ -41,4 +41,10 @@
 
     <string name="save_to_file_title">Save to file...</string>
     <string name="file_name_hint">File name</string>
+    <string name="shared_preferences_name" />
+    <string name="alert_couldnt_delete_system_category">Couldn\'t delete system category</string>
+    <string name="alert_question_move_cards_to_unsorted">Move all underlaying cards to unsorted?</string>
+    <string name="action_move_to_unsorted">Move to Unsorted</string>
+    <string name="action_delete_all_underlaying_cards">Delete All</string>
+    <string name="couldnt_find_unsorted_cat">Couldn\'t find unsorted category</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.gmail.sgrimailo.cards.db.helper;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -24,7 +25,7 @@ final class DataBaseCreationAct1 implements DataBaseCreationAct {
 
 
     @Override
-    public void doAction(SQLiteDatabase db) {
+    public void doAction(SQLiteDatabase db, Context context) {
         Log.d(CardsContract.CardSets.LOG_TAG,
                 String.format("Table Creation:\n%s", CREATE_CARDS_SETS_TABLE));
         db.execSQL(CREATE_CARDS_SETS_TABLE);

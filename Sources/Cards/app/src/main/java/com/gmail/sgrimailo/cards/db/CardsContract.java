@@ -20,6 +20,13 @@ public final class CardsContract {
         public static final String TABLE_NAME = "card_sets";
 
         public static final String COLUMN_TITLE = "title";
+        /**
+         * 0 - user-defined card set,
+         * 1 - unsorted card set
+         */
+        public static final String COLUMN_TYPE = "type";
+
+        public static final String[] COLUMNS_FULL_SET = {_ID, COLUMN_TYPE, COLUMN_TITLE};
     }
 
     public static final class Cards implements BaseColumns {
@@ -33,7 +40,6 @@ public final class CardsContract {
 
         public static final String COLUMN_FRONT_SIDE = "front_side";
         public static final String COLUMN_BACK_SIDE = "back_side";
-
     }
 
 }

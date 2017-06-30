@@ -19,6 +19,7 @@ import android.widget.SimpleCursorAdapter;
 
 import com.gmail.sgrimailo.cards.db.CardsContract.Cards;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
+import com.gmail.sgrimailo.utils.db.DataBaseHelper;
 
 public class CardListActivity extends AppCompatActivity {
 
@@ -147,12 +148,7 @@ public class CardListActivity extends AppCompatActivity {
                     SQLiteOpenHelper helper = new CardsDBHelper(CardListActivity.this);
                     SQLiteDatabase db = helper.getWritableDatabase();
 
-                    String whereClause = String.format("%s = ?", Cards._ID);
-                    db.delete(Cards.TABLE_NAME, whereClause, new String[] {selectedItemID.toString()});
-
-                    Log.d(CardListActivity.class.getName(),
-                            String.format("Card has been removed - id: %s, card set id: %s",
-                                    selectedItemID, cardSetID));
+                    DataBaseHelper.deleteItemById(db, Cards.TABLE_NAME, selectedItemID);
                     updateListView();
                 }
             });
