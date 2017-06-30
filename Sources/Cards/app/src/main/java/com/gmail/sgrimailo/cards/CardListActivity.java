@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,10 +20,10 @@ import android.widget.SimpleCursorAdapter;
 import com.gmail.sgrimailo.cards.db.CardsContract.Cards;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
 
-public class CardSetCardsActivity extends AppCompatActivity {
+public class CardListActivity extends AppCompatActivity {
 
     public static final String EXTRA_CARD_SET_ID = String.format("%s.%s",
-            CardSetCardsActivity.class.getName(), "EXTRA_CARD_SET_ID");
+            CardListActivity.class.getName(), "EXTRA_CARD_SET_ID");
 
     private static final int REQUEST_CODE_CREATE_NEW_CARD = 1;
     private static final int REQUEST_CODE_EDIT_CARD = 2;
@@ -32,7 +34,9 @@ public class CardSetCardsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card_set_cards);
+        setContentView(R.layout.activity_card_list);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ListView cardsListView = (ListView) findViewById(R.id.lstvCards);
         cardsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,6 +58,30 @@ public class CardSetCardsActivity extends AppCompatActivity {
         cardSetID = intent.getLongExtra(EXTRA_CARD_SET_ID, -1);
 
         updateListView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.card_list_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                onAddButtonClick(null);
+                break;
+            case R.id.action_edit:
+                onEditButtonClick(null);
+                break;
+            case R.id.action_remove:
+                onRemoveButtonClick(null);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     private void updateListView() {
@@ -116,13 +144,13 @@ public class CardSetCardsActivity extends AppCompatActivity {
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    SQLiteOpenHelper helper = new CardsDBHelper(CardSetCardsActivity.this);
+                    SQLiteOpenHelper helper = new CardsDBHelper(CardListActivity.this);
                     SQLiteDatabase db = helper.getWritableDatabase();
 
                     String whereClause = String.format("%s = ?", Cards._ID);
                     db.delete(Cards.TABLE_NAME, whereClause, new String[] {selectedItemID.toString()});
 
-                    Log.d(CardSetCardsActivity.class.getName(),
+                    Log.d(CardListActivity.class.getName(),
                             String.format("Card has been removed - id: %s, card set id: %s",
                                     selectedItemID, cardSetID));
                     updateListView();

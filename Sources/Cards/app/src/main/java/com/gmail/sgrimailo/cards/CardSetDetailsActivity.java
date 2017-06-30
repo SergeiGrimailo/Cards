@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -33,6 +35,8 @@ public class CardSetDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_set_details);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (!getIntent().hasExtra(EXTRA_CARD_SET_ACTION)) {
             throw new IllegalStateException(String.format("Set up card set activity action (%s)",
@@ -60,6 +64,22 @@ public class CardSetDetailsActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done_button_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            onDoneButtonClick(null);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -98,7 +118,7 @@ public class CardSetDetailsActivity extends AppCompatActivity {
             }
         }
 
-        Intent intent = new Intent(this, CardSetCardsActivity.class);
+        Intent intent = new Intent(this, CardListActivity.class);
         intent.putExtra(EXTRA_CARD_SET_ID, cardSetID);
         setResult(Activity.RESULT_OK, intent);
         finish();

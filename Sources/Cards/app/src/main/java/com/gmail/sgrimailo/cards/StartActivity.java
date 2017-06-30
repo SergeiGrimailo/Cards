@@ -43,8 +43,8 @@ public class StartActivity extends AppCompatActivity {
 
                 Long createdCardSetID = data.getLongExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ID,
                         -1);
-                Intent intent = new Intent(this, CardSetCardsActivity.class);
-                intent.putExtra(CardSetCardsActivity.EXTRA_CARD_SET_ID, createdCardSetID);
+                Intent intent = new Intent(this, CardListActivity.class);
+                intent.putExtra(CardListActivity.EXTRA_CARD_SET_ID, createdCardSetID);
                 startActivityForResult(intent, REQUEST_CODE_EDIT_CARD_SET);
             }
         } else if (requestCode == REQUEST_CODE_EDIT_CARD_SET) {

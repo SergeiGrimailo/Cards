@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -35,6 +37,9 @@ public class CardDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_details);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         processIntent(getIntent());
 
         if (cardAction == CARD_ACTION_EDIT_EXISTING_ONE) {
@@ -59,6 +64,26 @@ public class CardDetailsActivity extends AppCompatActivity {
             } else {
                 throw new IllegalStateException(String.format("Couldn't find card (id: %d)", cardId));
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done_button_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            onDoneButtonClick(null);
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

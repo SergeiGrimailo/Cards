@@ -53,15 +53,18 @@ public class CardSetListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_card_set_list);
 
         int runMode = getIntent().getIntExtra(EXTRA_RUN_MODE, 0);
-        View panelCardSetsEditing = findViewById(R.id.panelCardSetsEditing);
-        View panelCardSetSelect = findViewById(R.id.panelCardSetSelect);
-        if (runMode == RUN_MODE_SELECT_CARD_SET) {
-            panelCardSetsEditing.setVisibility(View.INVISIBLE);
-            panelCardSetSelect.setVisibility(View.VISIBLE);
-        } else {
-            panelCardSetsEditing.setVisibility(View.VISIBLE);
-            panelCardSetSelect.setVisibility(View.INVISIBLE);
-        }
+
+//        View panelCardSetsEditing = findViewById(R.id.panelCardSetsEditing);
+//        View panelCardSetSelect = findViewById(R.id.panelCardSetSelect);
+//        if (runMode == RUN_MODE_SELECT_CARD_SET) {
+//            panelCardSetsEditing.setVisibility(View.INVISIBLE);
+//            panelCardSetSelect.setVisibility(View.VISIBLE);
+//        } else {
+//            panelCardSetsEditing.setVisibility(View.VISIBLE);
+//            panelCardSetSelect.setVisibility(View.INVISIBLE);
+//        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         updateListView();
 
@@ -91,7 +94,7 @@ public class CardSetListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.card_set_list_actions, menu);
+        getMenuInflater().inflate(R.menu.card_set_list_menu, menu);
         return true;
     }
 
@@ -101,8 +104,22 @@ public class CardSetListActivity extends AppCompatActivity {
             case R.id.save_to_file_action:
                 saveSelectedCardSetToFile(null);
                 return true;
+            case R.id.action_add:
+                onAddButtonClick(null);
+                break;
+            case R.id.action_edit:
+                onEditButtonClick(null);
+                break;
+            case R.id.action_remove:
+                // TODO
+                break;
+            case R.id.action_show_cards:
+                onCardsButtonClick(null);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -116,19 +133,21 @@ public class CardSetListActivity extends AppCompatActivity {
                 }
                 break;
             case REQUEST_CODE_CREATE_TEXT_DOCUMENT:
-                try {
-                    OutputStream outStr = getContentResolver().openOutputStream(data.getData());
-                    try{
-                        Writer writer = new OutputStreamWriter(outStr);
-                        CardsPersister.persistCards(new CardsDBHelper(this).getReadableDatabase(),
-                                selectedCardSetID, writer);
-                        writer.flush();
-                        writer.close();
-                    } finally {
-                        outStr.close();
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        OutputStream outStr = getContentResolver().openOutputStream(data.getData());
+                        try {
+                            Writer writer = new OutputStreamWriter(outStr);
+                            CardsPersister.persistCards(new CardsDBHelper(this).getReadableDatabase(),
+                                    selectedCardSetID, writer);
+                            writer.flush();
+                            writer.close();
+                        } finally {
+                            outStr.close();
+                        }
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "Failed to import card set to file.", e);
                     }
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Failed to import card set to file.", e);
                 }
         }
 
@@ -143,8 +162,8 @@ public class CardSetListActivity extends AppCompatActivity {
 
     public void onCardsButtonClick(View view) {
         if (selectedCardSetID != null) {
-            Intent intent = new Intent(this, CardSetCardsActivity.class);
-            intent.putExtra(CardSetCardsActivity.EXTRA_CARD_SET_ID, selectedCardSetID);
+            Intent intent = new Intent(this, CardListActivity.class);
+            intent.putExtra(CardListActivity.EXTRA_CARD_SET_ID, selectedCardSetID);
             startActivity(intent);
         }
     }

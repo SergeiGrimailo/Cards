@@ -19,11 +19,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CardSetDetailsActivity" />
-        <activity android:name=".CardSetCardsActivity" />
-        <activity android:name=".CardDetailsActivity" />
-        <activity android:name=".CardSetListActivity" />
+
+        <activity android:name=".CardSetListActivity" android:parentActivityName=".StartActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StartActivity"/>
+        </activity>
+
+        <activity android:name=".CardSetDetailsActivity" android:parentActivityName=".CardSetListActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CardSetListActivity" />
+        </activity>
+
+        <activity android:name=".CardListActivity" android:parentActivityName=".CardSetListActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CardSetListActivity" />
+        </activity>
+
+        <activity android:name=".CardDetailsActivity" android:parentActivityName=".CardListActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CardListActivity"/>
+        </activity>
+
         <activity android:name=".CardsPlayerActivity" />
+
         <activity android:name="com.gmail.sgrimailo.utils.file_explorer.FileExplorerActivity" />
     </application>
 
