@@ -20,7 +20,7 @@ public class CardsPersister {
         int frontColumnIndex = cursor.getColumnIndex(CardsContract.Cards.COLUMN_FRONT_SIDE);
         int backColumnIndex = cursor.getColumnIndex(CardsContract.Cards.COLUMN_BACK_SIDE);
         while (cursor.moveToNext()) {
-            aWriter.append(String.format("%s - %s\n",
+            aWriter.append(String.format("%s - %s\r\n",
                     cursor.getString(frontColumnIndex), cursor.getString(backColumnIndex)));
         }
     }

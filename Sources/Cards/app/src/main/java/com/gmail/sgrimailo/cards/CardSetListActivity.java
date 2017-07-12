@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -63,12 +64,33 @@ public class CardSetListActivity extends AppCompatActivity {
         updateListView();
         ListView cardSetsListView = (ListView) findViewById(R.id.lstvCardSets);
         cardSetsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            private long firstClickTime = 0;
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(CardSetListActivity.class.getName(), String.format("Item selected - position: %d, id: %d", position, id));
+                if (BuildConfig.DEBUG) Log.d(CardSetListActivity.class.getName(),
+                        String.format("Item selected - position: %d, id: %d", position, id));
                 selectedCardSetId = id;
+
+                long currentTimeMs = System.currentTimeMillis();
+                long secondClickTimeDelta = currentTimeMs - firstClickTime;
+                if (secondClickTimeDelta < 300) {
+                    // looks like double click
+                    onCardsButtonClick(null);
+                }
+                firstClickTime = currentTimeMs;
             }
         });
+        cardSetsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedCardSetId = id;
+                onEditButtonClick(null);
+                return true;
+            }
+        });
+
     }
 
     private void updateListView() {
