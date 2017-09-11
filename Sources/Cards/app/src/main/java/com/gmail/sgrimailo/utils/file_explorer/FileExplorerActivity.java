@@ -1,5 +1,6 @@
 package com.gmail.sgrimailo.utils.file_explorer;
 
+import android.content.Intent;
 import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -90,6 +92,27 @@ public class FileExplorerActivity extends AppCompatActivity {
         });
 
         initializeFilesList();
+
+        processIntent();
+    }
+
+    private void processIntent() {
+        Intent intent = getIntent();
+        if (intent.getAction() == Intent.ACTION_CREATE_DOCUMENT) {
+            String mimeType = intent.getType();
+            String fileExt = null;
+            switch (mimeType) {
+                case "text/plain":
+                    fileExt = ".txt";
+                    break;
+                default:
+                    break;
+            }
+
+            String title = intent.getStringExtra(Intent.EXTRA_TITLE);
+            EditText etSavedFileName = (EditText) findViewById(R.id.etSavedFileName);
+            etSavedFileName.setText(String.format("%s%s", title, fileExt != null? fileExt: ""));
+        }
     }
 
     private void initializeFilesList() {

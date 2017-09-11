@@ -1,6 +1,7 @@
 package com.gmail.sgrimailo.cards;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -106,6 +107,8 @@ public class CardSetListActivity extends AppCompatActivity {
 
         ListView cardSetsListView = (ListView) findViewById(R.id.lstvCardSets);
         cardSetsListView.setAdapter(cardSetsAdapter);
+
+        db.close();
     }
 
     @Override
@@ -283,6 +286,7 @@ public class CardSetListActivity extends AppCompatActivity {
             Map<String, Object> cardSetFields = DataBaseHelper.getItemByIdMap(
                     db, CardSets.TABLE_NAME, new String[]{CardSets.COLUMN_TITLE},
                     selectedCardSetId);
+            db.close();
             String cardSetTitle = (String) cardSetFields.get(CardSets.COLUMN_TITLE);
 
             Intent createDocumentIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -290,8 +294,15 @@ public class CardSetListActivity extends AppCompatActivity {
             createDocumentIntent.setType("text/plain");
             createDocumentIntent.addCategory(Intent.CATEGORY_OPENABLE);
 
-            if (createDocumentIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(createDocumentIntent, REQUEST_CODE_CREATE_TEXT_DOCUMENT);
+//            if (createDocumentIntent.resolveActivity(getPackageManager()) != null) {
+//                startActivityForResult(createDocumentIntent, REQUEST_CODE_CREATE_TEXT_DOCUMENT);
+//            } else
+            {
+                createDocumentIntent.removeCategory(Intent.CATEGORY_OPENABLE);
+                ComponentName componentName = createDocumentIntent.resolveActivity(getPackageManager());
+                if (componentName != null) {
+                    startActivityForResult(createDocumentIntent, REQUEST_CODE_CREATE_TEXT_DOCUMENT);
+                }
             }
         }
     }

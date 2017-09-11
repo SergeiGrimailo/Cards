@@ -15,7 +15,6 @@
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,7 +41,14 @@
 
         <activity android:name=".CardsPlayerActivity" />
 
-        <activity android:name="com.gmail.sgrimailo.utils.file_explorer.FileExplorerActivity" />
+        <activity android:name="com.gmail.sgrimailo.utils.file_explorer.FileExplorerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_DOCUMENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
