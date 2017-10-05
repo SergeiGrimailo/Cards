@@ -1,0 +1,4 @@
+Add new card
+Play card set
+View card sets
+Import card set

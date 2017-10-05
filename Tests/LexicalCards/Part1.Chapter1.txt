@@ -1,0 +1,16 @@
+﻿language[ˈlæŋgwıdʒ]-язык
+sentence[ˈsentəns]-предложение
+word[wə:d]-слово
+people[ˈpı:pl]-люди
+name[]-имя
+surname[]-фамилия
+baby[]-ребёнок, малыш
+boy[]-мальчик, молодой человек
+girl[]-девочка,девушка
+man[]-мужчина
+men[]-форма мн.ч. слова man
+woman[]-женщина
+women[]-форма мн.ч.слова woman
+family[]-семья
+uncle[]-дядя
+aunt[]-тетя
