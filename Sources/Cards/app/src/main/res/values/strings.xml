@@ -47,4 +47,7 @@
     <string name="action_move_to_unsorted">Move to Unsorted</string>
     <string name="action_delete_all_underlaying_cards">Delete All</string>
     <string name="couldnt_find_unsorted_cat">Couldn\'t find unsorted category</string>
+
+    <string name="selected_items_template">%d selected</string>
+    <string name="remove_card_sets_alert_template">Remove %d card set(s)?</string>
 </resources>

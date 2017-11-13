@@ -8,14 +8,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -48,8 +49,8 @@ public class CardSetListActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = CardSetListActivity.class.getSimpleName();
 
-
-    private Long selectedCardSetId = null;
+    private ActionMode mCardSetsListActionMode = null;
+    private ListView mCardSetsListView;
 
     private static String genTag(String aTagName) {
         return String.format("%s.%s", CardSetListActivity.class.getSimpleName(), aTagName);
@@ -62,36 +63,107 @@ public class CardSetListActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final Integer runMode = getIntent().getIntExtra(EXTRA_RUN_MODE, 0);
         updateListView();
-        ListView cardSetsListView = (ListView) findViewById(R.id.lstvCardSets);
-        cardSetsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            private long firstClickTime = 0;
+        mCardSetsListView = (ListView) findViewById(R.id.lstvCardSets);
+        if (runMode != RUN_MODE_SELECT_CARD_SET) {
+            mCardSetsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+            mCardSetsListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (BuildConfig.DEBUG) Log.d(CardSetListActivity.class.getName(),
-                        String.format("Item selected - position: %d, id: %d", position, id));
-                selectedCardSetId = id;
+                boolean moreThanOne = false;
+                boolean moreThanOneMenu = false;
 
-                long currentTimeMs = System.currentTimeMillis();
-                long secondClickTimeDelta = currentTimeMs - firstClickTime;
-                if (secondClickTimeDelta < 300) {
-                    // looks like double click
-                    onCardsButtonClick(null);
+                @Override
+                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                    if (moreThanOne) {
+                        if (mCardSetsListView.getCheckedItemCount() == 1) {
+                            moreThanOne = false;
+                            mode.invalidate();
+                        }
+                    } else {
+                        if (mCardSetsListView.getCheckedItemCount() > 1) {
+                            moreThanOne = true;
+                            mode.invalidate();
+                        }
+                    }
+                    mode.setTitle(String.format(getString(R.string.selected_items_template),
+                            mCardSetsListView.getCheckedItemCount()));
                 }
-                firstClickTime = currentTimeMs;
-            }
-        });
-        cardSetsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedCardSetId = id;
-                onEditButtonClick(null);
-                return true;
-            }
-        });
 
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    moreThanOne = mCardSetsListView.getCheckedItemCount() > 1;
+                    moreThanOneMenu = !moreThanOne;
+                    mCardSetsListActionMode = mode;
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    if (moreThanOne) {
+                        if (!moreThanOneMenu) {
+                            menu.clear();
+                            mode.getMenuInflater().inflate(
+                                    R.menu.card_set_list_contextual_menu_2, menu);
+                            moreThanOneMenu = true;
+                        }
+                    } else {
+                        if (moreThanOneMenu) {
+                            menu.clear();
+                            mode.getMenuInflater().inflate(
+                                    R.menu.card_set_list_contextual_menu_1, menu);
+                            moreThanOneMenu = false;
+                        }
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_edit:
+                            editCheckedCardSet();
+                            break;
+                        case R.id.action_remove:
+                            deleteCheckedCardSet();
+                            break;
+                        case R.id.action_show_cards:
+                            if (mCardSetsListView.getCheckedItemIds().length > 0) {
+                                showCardsFor(mCardSetsListView.getCheckedItemIds()[0]);
+                                mCardSetsListActionMode.finish();
+                            }
+                            break;
+                        case R.id.save_to_file_action:
+                            saveSelectedCardSetToFile();
+                            break;
+                    }
+                    return true;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    mCardSetsListActionMode = null;
+                }
+            });
+
+            mCardSetsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (mCardSetsListActionMode == null) {
+                        showCardsFor(id);
+                    }
+                }
+            });
+        } else {
+            mCardSetsListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        }
+    }
+
+    private void finishActionMode() {
+        if (mCardSetsListActionMode != null) {
+            mCardSetsListActionMode.finish();
+        }
     }
 
     private void updateListView() {
@@ -125,20 +197,8 @@ public class CardSetListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.save_to_file_action:
-                saveSelectedCardSetToFile(null);
-                return true;
             case R.id.action_add:
                 onAddButtonClick(null);
-                break;
-            case R.id.action_edit:
-                onEditButtonClick(null);
-                break;
-            case R.id.action_remove:
-                onDeleteButtonClick(null);
-                break;
-            case R.id.action_show_cards:
-                onCardsButtonClick(null);
                 break;
             case R.id.action_done:
                 onSelectButtonClick(null);
@@ -155,6 +215,7 @@ public class CardSetListActivity extends AppCompatActivity {
             case REQUEST_CODE_CREATE_NEW_CARD_SET:
             case REQUEST_CODE_EDIT_CARD_SET:
                 if (resultCode == Activity.RESULT_OK) {
+                    finishActionMode();
                     updateListView();
                 }
                 break;
@@ -165,8 +226,9 @@ public class CardSetListActivity extends AppCompatActivity {
                         try {
                             Writer writer = new OutputStreamWriter(outStr);
                             CardsPersister.persistCards(new CardsDBHelper(this).getReadableDatabase(),
-                                    selectedCardSetId, writer);
+                                    mCardSetsListView.getCheckedItemIds()[0], writer);
                             writer.flush();
+                            finishActionMode();
                             writer.close();
                         } finally {
                             outStr.close();
@@ -186,25 +248,43 @@ public class CardSetListActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_CREATE_NEW_CARD_SET);
     }
 
-    public void onCardsButtonClick(View view) {
-        if (selectedCardSetId != null) {
-            Intent intent = new Intent(this, CardListActivity.class);
-            intent.putExtra(CardListActivity.EXTRA_CARD_SET_ID, selectedCardSetId);
-            startActivity(intent);
-        }
+    public void showCardsFor(long cardSetId) {
+        Intent intent = new Intent(this, CardListActivity.class);
+        intent.putExtra(CardListActivity.EXTRA_CARD_SET_ID, cardSetId);
+        startActivity(intent);
     }
 
-    public void onEditButtonClick(View view) {
-        if (selectedCardSetId != null) {
+    public void editCheckedCardSet() {
+        if (mCardSetsListView.getCheckedItemIds().length > 0) {
             Intent intent = new Intent(this, CardSetDetailsActivity.class);
             intent.putExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ACTION,
                     CardSetDetailsActivity.CARD_SET_ACTION_EDIT_EXISTING_ONE);
-            intent.putExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ID, selectedCardSetId);
+            intent.putExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ID,
+                    mCardSetsListView.getCheckedItemIds()[0]);
             startActivityForResult(intent, REQUEST_CODE_EDIT_CARD_SET);
         }
     }
 
-    public void onDeleteButtonClick(View view) {
+    public void deleteCheckedCardSet() {
+        if (mCardSetsListView.getCheckedItemIds().length > 0) {
+            new AlertDialog.Builder(this)
+                    .setMessage(String.format(
+                            getString(R.string.remove_card_sets_alert_template),
+                            mCardSetsListView.getCheckedItemIds().length))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (Long cardSetId: mCardSetsListView.getCheckedItemIds()) {
+                                deleteCardSet(cardSetId);
+                            }
+                            finishActionMode();
+                        }
+                    }).setNegativeButton(android.R.string.no, null)
+                    .show();
+        }
+    }
+
+    private void deleteCardSet(final Long selectedCardSetId) {
         if (selectedCardSetId != null) {
             final SQLiteDatabase db = new CardsDBHelper(this).getWritableDatabase();
             Map<String, Object> catToBeDeleted = DataBaseHelper.getItemByIdMap(db,
@@ -234,7 +314,7 @@ public class CardSetListActivity extends AppCompatActivity {
                                     db.update(Cards.TABLE_NAME, cv,
                                             String.format("%s = ?", Cards.COLUMN_CARD_SET_ID),
                                             new String[] {selectedCardSetId.toString()});
-                                    deleteCardSet(db, CardSetListActivity.this.selectedCardSetId);
+                                    deleteCardSet(db, selectedCardSetId);
                                 } else {
                                     new AlertDialog.Builder(CardSetListActivity.this)
                                             .setMessage(R.string.couldnt_find_unsorted_cat)
@@ -247,7 +327,7 @@ public class CardSetListActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 DataBaseHelper.deleteItemByFieldValue(db, Cards.TABLE_NAME,
                                         Cards.COLUMN_CARD_SET_ID, selectedCardSetId);
-                                deleteCardSet(db, CardSetListActivity.this.selectedCardSetId);
+                                deleteCardSet(db, selectedCardSetId);
                             }
                         };
                         new AlertDialog.Builder(this)
@@ -271,21 +351,21 @@ public class CardSetListActivity extends AppCompatActivity {
     }
 
     public void onSelectButtonClick(View view) {
-        if (selectedCardSetId != null) {
+        if (mCardSetsListView.getCheckedItemIds().length > 0) {
             Intent data = new Intent();
-            data.putExtra(EXTRA_SELECTED_CARD_SET_ID, selectedCardSetId);
+            data.putExtra(EXTRA_SELECTED_CARD_SET_ID, mCardSetsListView.getCheckedItemIds()[0]);
             setResult(Activity.RESULT_OK, data);
             finish();
         }
     }
 
-    public void saveSelectedCardSetToFile(View view) {
-        if (selectedCardSetId != null) {
+    public void saveSelectedCardSetToFile() {
+        if (mCardSetsListView.getCheckedItemIds().length > 0) {
             // ask for file name
             SQLiteDatabase db = new CardsDBHelper(this).getReadableDatabase();
             Map<String, Object> cardSetFields = DataBaseHelper.getItemByIdMap(
                     db, CardSets.TABLE_NAME, new String[]{CardSets.COLUMN_TITLE},
-                    selectedCardSetId);
+                    mCardSetsListView.getCheckedItemIds()[0]);
             db.close();
             String cardSetTitle = (String) cardSetFields.get(CardSets.COLUMN_TITLE);
 
