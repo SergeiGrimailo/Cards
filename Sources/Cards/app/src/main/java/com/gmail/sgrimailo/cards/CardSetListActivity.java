@@ -16,7 +16,6 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -28,6 +27,7 @@ import com.gmail.sgrimailo.cards.db.CardsPersister;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
 import com.gmail.sgrimailo.cards.preferences.PreferencesHelper;
 import com.gmail.sgrimailo.utils.db.DataBaseHelper;
+import com.gmail.sgrimailo.utils.ui.AdjustedMultiChoiceModeListener;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -69,54 +69,22 @@ public class CardSetListActivity extends AppCompatActivity {
         mCardSetsListView = (ListView) findViewById(R.id.lstvCardSets);
         if (runMode != RUN_MODE_SELECT_CARD_SET) {
             mCardSetsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-            mCardSetsListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-
-                boolean moreThanOne = false;
-                boolean moreThanOneMenu = false;
+            mCardSetsListView.setMultiChoiceModeListener(new AdjustedMultiChoiceModeListener(
+                    mCardSetsListView, R.menu.card_set_list_contextual_menu_1,
+                    R.menu.card_set_list_contextual_menu_2) {
 
                 @Override
-                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                    if (moreThanOne) {
-                        if (mCardSetsListView.getCheckedItemCount() == 1) {
-                            moreThanOne = false;
-                            mode.invalidate();
-                        }
-                    } else {
-                        if (mCardSetsListView.getCheckedItemCount() > 1) {
-                            moreThanOne = true;
-                            mode.invalidate();
-                        }
-                    }
+                public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
+                                                      boolean checked) {
+                    super.onItemCheckedStateChanged(mode, position, id, checked);
                     mode.setTitle(String.format(getString(R.string.selected_items_template),
                             mCardSetsListView.getCheckedItemCount()));
                 }
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    moreThanOne = mCardSetsListView.getCheckedItemCount() > 1;
-                    moreThanOneMenu = !moreThanOne;
                     mCardSetsListActionMode = mode;
-                    return true;
-                }
-
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    if (moreThanOne) {
-                        if (!moreThanOneMenu) {
-                            menu.clear();
-                            mode.getMenuInflater().inflate(
-                                    R.menu.card_set_list_contextual_menu_2, menu);
-                            moreThanOneMenu = true;
-                        }
-                    } else {
-                        if (moreThanOneMenu) {
-                            menu.clear();
-                            mode.getMenuInflater().inflate(
-                                    R.menu.card_set_list_contextual_menu_1, menu);
-                            moreThanOneMenu = false;
-                        }
-                    }
-                    return true;
+                    return super.onCreateActionMode(mode, menu);
                 }
 
                 @Override
@@ -160,7 +128,7 @@ public class CardSetListActivity extends AppCompatActivity {
         }
     }
 
-    private void finishActionMode() {
+    private void clearSelection() {
         if (mCardSetsListActionMode != null) {
             mCardSetsListActionMode.finish();
         }
@@ -215,7 +183,7 @@ public class CardSetListActivity extends AppCompatActivity {
             case REQUEST_CODE_CREATE_NEW_CARD_SET:
             case REQUEST_CODE_EDIT_CARD_SET:
                 if (resultCode == Activity.RESULT_OK) {
-                    finishActionMode();
+                    clearSelection();
                     updateListView();
                 }
                 break;
@@ -228,7 +196,7 @@ public class CardSetListActivity extends AppCompatActivity {
                             CardsPersister.persistCards(new CardsDBHelper(this).getReadableDatabase(),
                                     mCardSetsListView.getCheckedItemIds()[0], writer);
                             writer.flush();
-                            finishActionMode();
+                            clearSelection();
                             writer.close();
                         } finally {
                             outStr.close();
@@ -277,7 +245,7 @@ public class CardSetListActivity extends AppCompatActivity {
                             for (Long cardSetId: mCardSetsListView.getCheckedItemIds()) {
                                 deleteCardSet(cardSetId);
                             }
-                            finishActionMode();
+                            clearSelection();
                         }
                     }).setNegativeButton(android.R.string.no, null)
                     .show();

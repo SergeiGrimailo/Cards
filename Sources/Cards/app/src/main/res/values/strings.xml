@@ -25,7 +25,7 @@
     <string name="action_label_edit">Edit</string>
 
     <string name="alert_title_remove">Remove</string>
-    <string name="alert_question_remove_card">Are you sure you want to remove card?</string>
+    <string name="alert_question_remove_card_template">Delete %d card(s)?</string>
     <string name="action_label_show_cards">Cards</string>
     <string name="lorem_ipsum">Lorem Ipsum</string>
 

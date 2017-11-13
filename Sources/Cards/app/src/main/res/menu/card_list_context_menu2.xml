@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_add" android:title="@string/action_label_add"
-        android:icon="@android:drawable/ic_menu_add" app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_remove" android:title="@string/action_label_remove"
+        android:icon="@android:drawable/ic_menu_delete" app:showAsAction="never" />
 
 </menu>

@@ -12,8 +12,6 @@
         android:id="@+id/lstvCards"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:choiceMode="singleChoice"
-        android:listSelector="@android:color/holo_orange_light"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
