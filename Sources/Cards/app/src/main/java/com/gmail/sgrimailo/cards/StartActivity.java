@@ -13,7 +13,7 @@ import com.gmail.sgrimailo.utils.file_explorer.FileExplorerActivity;
 public class StartActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CREATE_NEW_CARD_SET = 1;
-    private static final int REQUEST_CODE_EDIT_CARD_SET = 2;
+    private static final int REQUEST_CODE_ADD_CARDS_TO_CARD_SET = 2;
     private static final int REQUEST_CODE_SELECT_CARD_SET = 3;
     private static final int REQUEST_CODE_SELECT_FILE_TO_IMPORT = 4;
 
@@ -45,9 +45,9 @@ public class StartActivity extends AppCompatActivity {
                         -1);
                 Intent intent = new Intent(this, CardListActivity.class);
                 intent.putExtra(CardListActivity.EXTRA_CARD_SET_ID, createdCardSetID);
-                startActivityForResult(intent, REQUEST_CODE_EDIT_CARD_SET);
+                startActivityForResult(intent, REQUEST_CODE_ADD_CARDS_TO_CARD_SET);
             }
-        } else if (requestCode == REQUEST_CODE_EDIT_CARD_SET) {
+        } else if (requestCode == REQUEST_CODE_ADD_CARDS_TO_CARD_SET) {
             if (resultCode == Activity.RESULT_OK) {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
                 alertBuilder.setTitle("DEBUG");

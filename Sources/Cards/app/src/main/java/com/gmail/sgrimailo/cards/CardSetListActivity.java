@@ -40,6 +40,7 @@ public class CardSetListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CREATE_NEW_CARD_SET = 1;
     private static final int REQUEST_CODE_EDIT_CARD_SET = 2;
     private static final int REQUEST_CODE_CREATE_TEXT_DOCUMENT = 3;
+    public static final int REQUEST_CODE_ADD_CARDS_TO_CARD_SET = 4;
 
     public static final String EXTRA_RUN_MODE = genTag("EXTRA_RUN_MODE");
 
@@ -185,6 +186,14 @@ public class CardSetListActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     clearSelection();
                     updateListView();
+                }
+                if (requestCode == REQUEST_CODE_CREATE_NEW_CARD_SET
+                        && resultCode == Activity.RESULT_OK) {
+                    Long createdCardSetID = data.getLongExtra(CardSetDetailsActivity.EXTRA_CARD_SET_ID,
+                            -1);
+                    Intent intent = new Intent(this, CardListActivity.class);
+                    intent.putExtra(CardListActivity.EXTRA_CARD_SET_ID, createdCardSetID);
+                    startActivityForResult(intent, REQUEST_CODE_ADD_CARDS_TO_CARD_SET);
                 }
                 break;
             case REQUEST_CODE_CREATE_TEXT_DOCUMENT:
