@@ -64,6 +64,14 @@ public class DataBaseHelper {
         }
     }
 
+    public static String getItemColumnValue(SQLiteDatabase db, String tableName,
+                                            String columnName, Long itemId) {
+        Map<String, Object> itemProperties = getItemByIdMap(db, tableName,
+                new String[] { columnName }, itemId);
+        Object columnValue = itemProperties.get(columnName);
+        return columnValue != null? columnValue.toString(): "";
+    }
+
     public static void deleteItemById(SQLiteDatabase db, String tableName, Long itemID) {
         Map<String, Object> item = getItemByIdMap(db, tableName, null, itemID);
         if (item != null) {
@@ -75,8 +83,8 @@ public class DataBaseHelper {
         }
     }
 
-    public static void deleteItemByFieldValue(SQLiteDatabase db, String tableName,
-                                              String fieldName, Object fieldValue) {
+    public static void deleteItemsByFieldValue(SQLiteDatabase db, String tableName,
+                                               String fieldName, Object fieldValue) {
         String whereClause = String.format("%s = ?", fieldName);
         db.delete(tableName, whereClause, new String[]{fieldValue.toString()});
         if (BuildConfig.DEBUG) Log.d(LOG_TAG, String.format(

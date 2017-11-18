@@ -18,9 +18,13 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.gmail.sgrimailo.cards.db.CardsContract.Cards;
+import com.gmail.sgrimailo.cards.db.CardsContract.CardSets;
 import com.gmail.sgrimailo.cards.db.helper.CardsDBHelper;
+import com.gmail.sgrimailo.utils.db.DataBaseFacade;
 import com.gmail.sgrimailo.utils.db.DataBaseHelper;
 import com.gmail.sgrimailo.utils.ui.AdjustedMultiChoiceModeListener;
+
+import java.util.Map;
 
 public class CardListActivity extends AppCompatActivity {
 
@@ -118,20 +122,26 @@ public class CardListActivity extends AppCompatActivity {
     }
 
     private void updateListView() {
-        SQLiteDatabase db = new CardsDBHelper(this).getReadableDatabase();
+        DataBaseFacade db = new DataBaseFacade(
+                new CardsDBHelper(this).getReadableDatabase());
 
         String[] columns = {Cards._ID, Cards.COLUMN_CARD_SET_ID, Cards.COLUMN_FRONT_SIDE,
                 Cards.COLUMN_BACK_SIDE};
         String selection = String.format("%s = ?", Cards.COLUMN_CARD_SET_ID);
 
-        Cursor cardsCursor = db.query(Cards.TABLE_NAME, columns, selection,
-                new String[] {cardSetID.toString()}, null, null, null);
+        Cursor cardsCursor = db.getItems(Cards.TABLE_NAME, columns, selection,
+                new String[] {cardSetID.toString()});
         SimpleCursorAdapter cardsAdapter = new SimpleCursorAdapter(this, R.layout.list_item_card,
                 cardsCursor, new String[] {Cards._ID,
                 Cards.COLUMN_CARD_SET_ID, Cards.COLUMN_FRONT_SIDE, Cards.COLUMN_BACK_SIDE},
                 new int[] {R.id.tvID, R.id.tvCardSetID, R.id.tvFrontSide, R.id.tvBackSide}, 0);
 
         mCardsListView.setAdapter(cardsAdapter);
+
+        Map<String, Object> cardSetProps = db.getItemByIdMap(
+                CardSets.TABLE_NAME, new String[] {CardSets.COLUMN_TITLE}, cardSetID);
+        Object cardSetTitle = cardSetProps.get(CardSets.COLUMN_TITLE);
+        getSupportActionBar().setTitle(cardSetTitle.toString());
     }
 
     private void clearSelection() {

@@ -62,6 +62,7 @@ public class CardSetListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_set_list);
 
+        getSupportActionBar().setTitle("Card Sets");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Integer runMode = getIntent().getIntExtra(EXTRA_RUN_MODE, 0);
@@ -302,7 +303,7 @@ public class CardSetListActivity extends AppCompatActivity {
                         DialogInterface.OnClickListener negBtnListener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DataBaseHelper.deleteItemByFieldValue(db, Cards.TABLE_NAME,
+                                DataBaseHelper.deleteItemsByFieldValue(db, Cards.TABLE_NAME,
                                         Cards.COLUMN_CARD_SET_ID, selectedCardSetId);
                                 deleteCardSet(db, selectedCardSetId);
                             }
