@@ -112,8 +112,11 @@ public class CardListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add:
-                onAddButtonClick(null);
+            case R.id.action_add_definition:
+                addDefinitionCard();
+                break;
+            case R.id.action_add_foreign_word:
+                addForeignWordCard();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -125,15 +128,15 @@ public class CardListActivity extends AppCompatActivity {
         DataBaseFacade db = new DataBaseFacade(
                 new CardsDBHelper(this).getReadableDatabase());
 
-        String[] columns = {Cards._ID, Cards.COLUMN_CARD_SET_ID, Cards.COLUMN_FRONT_SIDE,
-                Cards.COLUMN_BACK_SIDE};
+        String[] columns = {Cards._ID, Cards.COLUMN_CARD_SET_ID, Cards.COLUMN_WORD,
+                Cards.COLUMN_MEANING};
         String selection = String.format("%s = ?", Cards.COLUMN_CARD_SET_ID);
 
         Cursor cardsCursor = db.getItems(Cards.TABLE_NAME, columns, selection,
                 new String[] {cardSetID.toString()});
         SimpleCursorAdapter cardsAdapter = new SimpleCursorAdapter(this, R.layout.list_item_card,
                 cardsCursor, new String[] {Cards._ID,
-                Cards.COLUMN_CARD_SET_ID, Cards.COLUMN_FRONT_SIDE, Cards.COLUMN_BACK_SIDE},
+                Cards.COLUMN_CARD_SET_ID, Cards.COLUMN_WORD, Cards.COLUMN_MEANING},
                 new int[] {R.id.tvID, R.id.tvCardSetID, R.id.tvFrontSide, R.id.tvBackSide}, 0);
 
         mCardsListView.setAdapter(cardsAdapter);
@@ -150,20 +153,28 @@ public class CardListActivity extends AppCompatActivity {
         }
     }
 
-    public void onAddButtonClick(View view) {
-        Intent intent = new Intent(this, CardDetailsActivity.class);
-        intent.putExtra(CardDetailsActivity.EXTRA_CARD_ACTION,
-                CardDetailsActivity.CARD_ACTION_CREATE_NEW);
-        intent.putExtra(CardDetailsActivity.EXTRA_CARD_SET_ID, cardSetID);
+    public void addDefinitionCard() {
+        Intent intent = new Intent(this, DefinitionCardActivity.class);
+        intent.putExtra(DefinitionCardActivity.EXTRA_CARD_ACTION,
+                DefinitionCardActivity.CARD_ACTION_CREATE_NEW);
+        intent.putExtra(DefinitionCardActivity.EXTRA_CARD_SET_ID, cardSetID);
+        startActivityForResult(intent, REQUEST_CODE_CREATE_NEW_CARD);
+    }
+
+    public void addForeignWordCard() {
+        Intent intent = new Intent(this, ForeignWordActivity.class);
+        intent.putExtra(DefinitionCardActivity.EXTRA_CARD_ACTION,
+                DefinitionCardActivity.CARD_ACTION_CREATE_NEW);
+        intent.putExtra(DefinitionCardActivity.EXTRA_CARD_SET_ID, cardSetID);
         startActivityForResult(intent, REQUEST_CODE_CREATE_NEW_CARD);
     }
 
     public void editCheckedCards() {
         if (mCardsListView.getCheckedItemCount() > 0) {
-            Intent intent = new Intent(this, CardDetailsActivity.class);
-            intent.putExtra(CardDetailsActivity.EXTRA_CARD_ACTION,
-                    CardDetailsActivity.CARD_ACTION_EDIT_EXISTING_ONE);
-            intent.putExtra(CardDetailsActivity.EXTRA_CARD_ID,
+            Intent intent = new Intent(this, DefinitionCardActivity.class);
+            intent.putExtra(DefinitionCardActivity.EXTRA_CARD_ACTION,
+                    DefinitionCardActivity.CARD_ACTION_EDIT_EXISTING_ONE);
+            intent.putExtra(DefinitionCardActivity.EXTRA_CARD_ID,
                     mCardsListView.getCheckedItemIds()[0]);
             startActivityForResult(intent, REQUEST_CODE_EDIT_CARD);
         }

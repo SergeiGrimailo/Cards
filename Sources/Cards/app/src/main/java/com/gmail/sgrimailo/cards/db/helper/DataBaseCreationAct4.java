@@ -29,7 +29,7 @@ public class DataBaseCreationAct4 implements DataBaseCreationAct {
                 PreferencesHelper.SHARED_UNSORTED_CATEGORY_ID, -1);
 
         ContentValues cv = new ContentValues();
-        cv.put(CardSets.COLUMN_TYPE, 1);
+        cv.put(CardSets.COLUMN_TYPE, CardSets.CardSetType.Unsorted.ordinal());
         db.update(CardSets.TABLE_NAME, cv,
                 String.format("%s = ?", CardSets._ID),
                 new String[] {unsortedCategoryID.toString()});

@@ -20,7 +20,7 @@
     <string name="front_side_content_hint">Type card\'s front side content here</string>
     <string name="back_side_content_label">Back side:</string>
     <string name="back_side_content_hint">Type card\'s back side content here</string>
-    <string name="type_not_empty_content">Type not empty content</string>
+    <string name="alert_type_not_empty_value">Type not empty value!</string>
     <string name="action_label_done">Done</string>
     <string name="action_label_edit">Edit</string>
 
@@ -50,4 +50,21 @@
 
     <string name="selected_items_template">%d selected</string>
     <string name="remove_card_sets_alert_template">Remove %d card set(s)?</string>
+
+    <string name="action_add_definition">Add Definition</string>
+    <string name="action_add_foreign_word">Add Foreign Word</string>
+
+    <string name="label_word_or_phrase">Word (or Phrase):</string>
+    <string name="hint_word_or_phrase">Type foreign word or phrase here</string>
+    <string name="label_transcription">Transcription:</string>
+    <string name="hint_transcription">Type transcription here (optional)</string>
+    <string name="label_usage_examples">Usage examples:</string>
+    <string name="hint_usage_examples">Type usage examples here (optional)</string>
+    <string name="label_translation">Translation:</string>
+    <string name="hint_translation">Type word or phrase translation here</string>
+    <string name="label_term">Term:</string>
+    <string name="hint_term">Type the term here</string>
+    <string name="label_definition">Definition:</string>
+    <string name="hint_definition">Type the term\'s definition here</string>
+    <string name="action_edit_definition">Edit Definition</string>
 </resources>

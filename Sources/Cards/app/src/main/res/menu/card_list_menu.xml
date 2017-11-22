@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_add" android:title="@string/action_label_add"
-        android:icon="@android:drawable/ic_menu_add" app:showAsAction="ifRoom" />
+        android:icon="@android:drawable/ic_menu_add" app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/action_add_definition"
+                android:title="@string/action_add_definition" />
+            <item android:id="@+id/action_add_foreign_word"
+                android:title="@string/action_add_foreign_word" />
+        </menu>
+    </item>
 
 </menu>

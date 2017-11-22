@@ -28,7 +28,7 @@ public class CardsPlayerActivity extends AppCompatActivity {
 
         SQLiteOpenHelper helper = new CardsDBHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
-        String[] columns = {Cards._ID, Cards.COLUMN_FRONT_SIDE, Cards.COLUMN_BACK_SIDE};
+        String[] columns = {Cards._ID, Cards.COLUMN_WORD, Cards.COLUMN_MEANING};
         String selection = String.format("%s = ?", Cards.COLUMN_CARD_SET_ID);
         Cursor cardSetCursor = db.query(Cards.TABLE_NAME, columns, selection,
                 new String[] {cardSetID.toString()}, null, null, null);

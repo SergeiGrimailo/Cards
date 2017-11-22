@@ -269,7 +269,7 @@ public class CardSetListActivity extends AppCompatActivity {
                     CardSets.TABLE_NAME, CardSets.COLUMNS_FULL_SET, selectedCardSetId);
             if (catToBeDeleted != null) {
                 Integer type = (Integer) catToBeDeleted.get(CardSets.COLUMN_TYPE);
-                if (type > 0) {
+                if (type > CardSets.CardSetType.UserDefined.ordinal()) {
                     new AlertDialog.Builder(this)
                             .setMessage(R.string.alert_couldnt_delete_system_category)
                             .setPositiveButton(android.R.string.ok, null)

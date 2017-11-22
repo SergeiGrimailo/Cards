@@ -20,6 +20,8 @@ public final class CardsContract {
         public static final String TABLE_NAME = "card_sets";
 
         public static final String COLUMN_TITLE = "title";
+
+        public enum CardSetType { UserDefined, Unsorted };
         /**
          * 0 - user-defined card set,
          * 1 - unsorted card set
@@ -40,6 +42,18 @@ public final class CardsContract {
 
         public static final String COLUMN_FRONT_SIDE = "front_side";
         public static final String COLUMN_BACK_SIDE = "back_side";
+
+        public static final String COLUMN_WORD = "word";
+        public static final String COLUMN_TRANSCRIPTION = "transcription";
+        public static final String COLUMN_USAGE_EXAMPLES = "usage_examples";
+        public static final String COLUMN_MEANING = "meaning";
+
+        public enum CardType { Definition, ForeignWord };
+
+        /**
+         * For available values see @CardType enumeration.
+         */
+        public static final String COLUMN_TYPE = "type";
     }
 
 }

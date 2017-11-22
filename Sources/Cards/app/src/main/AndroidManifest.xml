@@ -34,9 +34,14 @@
                 android:value=".CardSetListActivity" />
         </activity>
 
-        <activity android:name=".CardDetailsActivity" android:parentActivityName=".CardListActivity">
+        <activity android:name=".DefinitionCardActivity" android:parentActivityName=".CardListActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CardListActivity"/>
+        </activity>
+
+        <activity android:name=".ForeignWordActivity" android:parentActivityName=".CardListActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ForeignWordActivity"/>
         </activity>
 
         <activity android:name=".CardsPlayerActivity" />

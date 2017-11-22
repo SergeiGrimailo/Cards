@@ -51,14 +51,14 @@ public class CardsPlayerFragment extends AppCompatDialogFragment {
         SQLiteDatabase db = new CardsDBHelper(getContext()).getReadableDatabase();
 
         Cursor cardCursor = DataBaseHelper.getItemById(db, Cards.TABLE_NAME,
-                new String[]{Cards.COLUMN_FRONT_SIDE, Cards.COLUMN_BACK_SIDE}, cardID);
+                new String[]{Cards.COLUMN_WORD, Cards.COLUMN_MEANING}, cardID);
         cardCursor.moveToFirst();
 
         TextView tvFrontSide = (TextView) getView().findViewById(R.id.tvFrontSideContent);
-        tvFrontSide.setText(cardCursor.getString(cardCursor.getColumnIndex(Cards.COLUMN_FRONT_SIDE)));
+        tvFrontSide.setText(cardCursor.getString(cardCursor.getColumnIndex(Cards.COLUMN_WORD)));
 
         TextView tvBackSide = (TextView) getView().findViewById(R.id.tvBackSideContent);
-        tvBackSide.setText(cardCursor.getString(cardCursor.getColumnIndex(Cards.COLUMN_BACK_SIDE)));
+        tvBackSide.setText(cardCursor.getString(cardCursor.getColumnIndex(Cards.COLUMN_MEANING)));
 
         flipCardSides();
 

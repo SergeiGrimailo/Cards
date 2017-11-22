@@ -28,8 +28,8 @@ public class DataBaseHelper {
 
     public static Map<String, Object> getItemByIdMap(SQLiteDatabase db, String tableName,
                                                      String[] columns, Long itemId) {
-        String[] fetchedColumns = columns;
         Cursor cursor = getItemById(db, tableName, columns, itemId);
+        String[] fetchedColumns = cursor.getColumnNames();
         if (cursor.moveToFirst()) {
             Map<String, Object> result = new HashMap<>();
             if (fetchedColumns == null) {
